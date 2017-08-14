@@ -18,7 +18,7 @@ class InterfaceController extends Controller
         $this->API = new TumblrAPIController();
         $this->API->user = $username;
 
-        $data = $this->loadData($username);
+        $data = $this->loadTumblrData($username);
 
         if (is_a($data, 'VIEW')) {
             return $data;
@@ -28,7 +28,7 @@ class InterfaceController extends Controller
         return null; //Placeholder
     }
 
-    function loadData($username) {
+    function loadTumblrData($username) {
         $this->API->init();
 
         if ($this->API->isValidUser()) {
@@ -36,7 +36,7 @@ class InterfaceController extends Controller
             return 'YOU! ARE! VALID!';
         } else {
             return 'error';
-            /*
+            /* pseudo-code for loading an error-view
             return view('loadErrorViewHere!!!', ['error' => [
                 'code' => 404,
                 'msg' => 'User not found',

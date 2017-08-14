@@ -10,6 +10,8 @@ namespace App\Http\Controllers;
 
 Use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 
 class TumblrAPIController extends Controller
 {
@@ -22,7 +24,16 @@ class TumblrAPIController extends Controller
     /** @var  Client */
     public $guzzle;
 
+    /** @var  Logger */
+    public $log;
+
     function init() {
+        $this->log = new Logger('TumblrAPIControllerLog');
+        $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController_debug.log', Logger::DEBUG));
+        $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController.log', Logger::INFO));
+        $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController_error.log', Logger::ERROR));
+        $this->log->log(Logger::DEBUG, 'TumblrAPIController initializing');
+
         $this->API_KEY = config('tumblr-api.api-key', null);
         $this->SECRET_KEY = config('tumblr-api.secret-key', null);
 
@@ -34,13 +45,22 @@ class TumblrAPIController extends Controller
     function isValidUser() {
         if (!empty($this->user)) {
             try {
-                $response = $this->guzzle->request('GET', 'blog/' . $this->user . '/info?api_key=' . $this->API_KEY);
-                return true;
+                $response = $this->guzzle->request('GET', 'blog/' . $this->user . '/info', [
+                    'query' => [
+                        'api_key' => $this->API_KEY,
+                    ],
+                ]);
+                if ($response->getStatusCode() == 200) {
+                    $this->log->log(Logger::DEBUG, 'Valid user: "' . $this->user . '"');
+                    return true;
+                } else {
+                    $this->log->log(Logger::WARNING, 'Unknown status code: "' . $response->getStatusCode() . '"; User: ' . $this->user);
+                }
             } catch (RequestException $e) {
                 if ($e->getCode() == 404) {
-                    echo 'User not found';
+                    $this->log->log(Logger::INFO, 'User not found: "' . $this->user . '"');
                 } else {
-                    echo 'Unknown exception: ' . $e->getCode();
+                    $this->log->log(Logger::WARNING, 'Unknown exception: "' . $e->getCode() . '"; User: ' . $this->user);
                 }
             }
         }
