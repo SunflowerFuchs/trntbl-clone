@@ -66,4 +66,29 @@ class TumblrAPIController extends Controller
         }
         return false;
     }
+
+    function loadAudioPosts(int $count = 20, int $offset = 0) {
+        try {
+            $response = $this->guzzle->request('GET', 'blog/' . $this->user . '/posts/audio', [
+                'query' => [
+                    'api_key' => $this->API_KEY,
+                    'limit' => $count,
+                    'offset' => $offset,
+                    'filter' => 'text',
+                ]
+            ]);
+            $data = json_decode($response->getBody(), true)['response'];
+            if ($data['total_posts'] == 0) {
+                return view('trntbl.main', [
+                    'error' => 'No audio posts found!',
+                ]);
+            }
+            return $data;
+        } catch (RequestException $e) {
+            $this->log->log(Logger::WARNING, 'Tumblr-API not reachable; Error: "' . $e->getMessage() . '"');
+            return view('trntbl.main', [
+                'error' => 'Couldn\'t load audio posts, maybe tumblrs API is down at the moment...',
+            ]);
+        }
+    }
 }

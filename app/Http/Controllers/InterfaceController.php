@@ -9,6 +9,8 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\View\View;
+
 class InterfaceController extends Controller
 {
     /** @var  TumblrAPIController */
@@ -20,10 +22,11 @@ class InterfaceController extends Controller
 
         $data = $this->loadTumblrData($username);
 
-        if (is_a($data, 'VIEW')) {
+        if ($data instanceof View) {
             return $data;
         }
-        //var_dump($data);
+
+        // TODO: create a view for the loaded data
 
         return null; //Placeholder
     }
@@ -32,16 +35,12 @@ class InterfaceController extends Controller
         $this->API->init();
 
         if ($this->API->isValidUser()) {
-            //do something
-            return 'YOU! ARE! VALID!';
+            $data = $this->API->loadAudioPosts();
+            return $data;
         } else {
-            return 'error';
-            /* pseudo-code for loading an error-view
-            return view('loadErrorViewHere!!!', ['error' => [
-                'code' => 404,
-                'msg' => 'User not found',
-            ]]);
-            */
+            return view('trntbl.main', [
+                'error' => 'User not found'
+            ]);
         }
     }
 }
