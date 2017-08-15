@@ -11,8 +11,8 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
+Route::any('/', function () {
+    return view('trntbl.main');
 });
 
-Route::get('/{username}', 'InterfaceController@showData');
+Route::any('/{username}', 'InterfaceController@showData');
