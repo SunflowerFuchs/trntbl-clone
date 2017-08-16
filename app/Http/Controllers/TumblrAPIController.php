@@ -60,7 +60,10 @@ class TumblrAPIController extends Controller
                 if ($e->getCode() == 404) {
                     $this->log->log(Logger::INFO, 'User not found: "' . $this->user . '"');
                 } else {
-                    $this->log->log(Logger::WARNING, 'Unknown exception: "' . $e->getCode() . '"; User: ' . $this->user);
+                    $this->log->log(Logger::WARNING, 'Unknown exception: "' . $e->getMessage() . '"; User: ' . $this->user);
+                    return view('trntbl.main', [
+                        'error' => "Unknown error. \n Try again later, and if it persists, contact me.",
+                    ]);
                 }
             }
         }

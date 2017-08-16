@@ -15,4 +15,8 @@ Route::any('/', function () {
     return view('trntbl.main');
 });
 
+Route::any('/my-site/known-bugs', function () {
+    return view('trntbl.bugs');
+});
+
 Route::any('/{username}', 'InterfaceController@showData');

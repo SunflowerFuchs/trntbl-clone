@@ -9,6 +9,7 @@
 namespace App\Http\Controllers;
 
 
+use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\View\View;
 
 class InterfaceController extends Controller
@@ -18,7 +19,7 @@ class InterfaceController extends Controller
 
     function showData(string $username) {
         $this->API = new TumblrAPIController();
-        $this->API->user = $username;
+        $this->API->user = strtolower($username);
 
         $data = $this->loadTumblrData($username);
 
@@ -26,18 +27,31 @@ class InterfaceController extends Controller
             return $data;
         }
 
-        // TODO: create a view for the loaded data
+        $paginatedData = new LengthAwarePaginator($data['posts'], $data['total_posts'], 20, LengthAwarePaginator::resolveCurrentPage(), [
+            'path' => '/' . $username,
+        ]);
 
-        return null; //Placeholder
+        return view('trntbl.list', [
+            'posts' => $paginatedData,
+            'total_posts' => $data['total_posts'],
+            'offset' => (LengthAwarePaginator::resolveCurrentPage() - 1) * 20,
+            'volume' => isset($_GET['volume'])?$_GET['volume']:0.50,
+        ]);
     }
 
     function loadTumblrData($username) {
         $this->API->init();
 
-        if ($this->API->isValidUser()) {
-            $data = $this->API->loadAudioPosts();
+        $result = $this->API->isValidUser();
+
+        if ($result === true) {
+            $data = $this->API->loadAudioPosts(20, (LengthAwarePaginator::resolveCurrentPage() - 1) * 20);
             return $data;
         } else {
+            if ($result instanceof View) {
+                return $result;
+            }
+
             return view('trntbl.main', [
                 'error' => 'User not found'
             ]);

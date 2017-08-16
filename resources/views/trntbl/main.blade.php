@@ -28,7 +28,9 @@
     </div>
     <div class="mastfoot">
         <div class="inner">
-            <p>Original idea by <a href="http://blog.trnrbl.me">trntbl</a>, this page was made by <a href="http://egoisticalgoat.tumblr.com">me</a></p>
+            <p>Original idea by <a href="http://blog.trnrbl.me">trntbl</a>, this page was made by <a href="http://egoisticalgoat.tumblr.com">me</a>.</p>
+            <p>If you have any suggestions/bugs/etc., contact me at <a href="http://egoisticalgoat.tumblr.com">my blog</a>.
+            I also have a list of <a href="{{ url('/my-site/known-bugs') }}">known bugs</a>.</p>
         </div>
     </div>
 @endsection
