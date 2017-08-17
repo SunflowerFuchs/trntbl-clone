@@ -11,8 +11,9 @@
     <div class="inner cover">
         <h1 class="cover-heading">Known bugs</h1>
         <ul style="display: inline-block; text-align: left">
-            <li>Music starts out too loud</li>
             <li>Play button is hard to hit on some devices</li>
+            <li>Music starts out too loud</li>
+            <li>Music volume resets after changing page manually <s>Actually i think many bugs come from page changing</s></li>
         </ul>
     </div>
 @endsection
