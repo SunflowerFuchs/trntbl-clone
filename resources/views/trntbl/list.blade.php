@@ -24,7 +24,7 @@
 
     <div class="inner cover pre-scrollable">
         <!-- Add table with posts here -->
-        <table class="table">
+        <table class="table" id="posts-table">
             @php
                 $i = $offset + 1
             @endphp

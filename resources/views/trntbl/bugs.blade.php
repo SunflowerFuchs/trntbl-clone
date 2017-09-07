@@ -18,7 +18,7 @@
         </ul>
         <h1 class="cover-heading">Planned features</h1>
         <ul style="display: inline-block; text-align: left">
-            <li>Endless scrolling</li>
+            <li>Prevent useless page changing (Endless scrolling? Something similar?)</li>
             <li>Updated design that doesn't look like shit</li>
             <li>Alternative variant of video posts</li>
         </ul>

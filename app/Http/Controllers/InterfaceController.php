@@ -18,10 +18,9 @@ class InterfaceController extends Controller
     private $API;
 
     function showData(string $username) {
-        $this->API = new TumblrAPIController();
-        $this->API->user = strtolower($username);
+        $this->API = new TumblrAPIController(strtolower($username));
 
-        $data = $this->loadTumblrData($username);
+        $data = $this->loadTumblrData();
 
         if ($data instanceof View) {
             return $data;
@@ -40,9 +39,7 @@ class InterfaceController extends Controller
         ]);
     }
 
-    function loadTumblrData($username) {
-        $this->API->init();
-
+    function loadTumblrData() {
         $result = $this->API->isValidUser();
 
         if ($result === true) {
