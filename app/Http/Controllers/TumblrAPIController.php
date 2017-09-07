@@ -27,7 +27,9 @@ class TumblrAPIController extends Controller
     /** @var  Logger */
     public $log;
 
-    function init() {
+    function __construct(string $username) {
+        $this->user = $username;
+
         $this->log = new Logger('TumblrAPIControllerLog');
         $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController_debug.log', Logger::DEBUG));
         $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController.log', Logger::INFO));
