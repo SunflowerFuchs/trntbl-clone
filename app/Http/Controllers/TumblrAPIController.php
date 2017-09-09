@@ -33,6 +33,7 @@ class TumblrAPIController extends Controller
         $this->log = new Logger('TumblrAPIControllerLog');
         $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController_debug.log', Logger::DEBUG));
         $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController.log', Logger::INFO));
+        $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController_error.log', Logger::WARNING));
         $this->log->pushHandler(new StreamHandler(storage_path() . '/logs/TumblrAPIController_error.log', Logger::ERROR));
         $this->log->log(Logger::DEBUG, 'TumblrAPIController initializing');
 
@@ -62,7 +63,7 @@ class TumblrAPIController extends Controller
                 if ($e->getCode() == 404) {
                     $this->log->log(Logger::INFO, 'User not found: "' . $this->user . '"');
                 } else {
-                    $this->log->log(Logger::WARNING, 'Unknown exception: "' . $e->getMessage() . '"; User: ' . $this->user);
+                    $this->log->log(Logger::ERROR, 'Unknown exception: "' . $e->getMessage() . '"; User: ' . $this->user);
                     return view('trntbl.main', [
                         'error' => "Unknown error. \n Try again later, and if it persists, contact me.",
                     ]);
