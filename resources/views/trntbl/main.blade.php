@@ -18,7 +18,7 @@
             <div class="form-group">
                 <input type="text" class="form-control" id="username" placeholder="Username">
             </div>
-            <button type="submit" class="btn btn-default" id="btn-listen">Listen</button>
+            <button type="submit" class="btn btn-default allowConsent" id="btn-listen">Listen</button>
         </form>
         @if(isset($error))
                 <p class="text-danger lead">
@@ -29,8 +29,8 @@
     <div class="mastfoot">
         <div class="inner">
             <p>Original idea by <a href="http://blog.trntbl.me/">trntbl</a>, this page was made by <a href="http://egoisticalgoat.tumblr.com">me</a>.</p>
-            <p>If you have any suggestions/bugs/etc., contact me at <a href="http://egoisticalgoat.tumblr.com">my blog</a>.
-            I also have a list of <a href="{{ url('/my-site/known-bugs') }}">known bugs</a>.</p>
+            <p>You can contact me at <a href="http://egoisticalgoat.tumblr.com">my blog</a>.
+            I also have a list of <a href="{{ url('/my-site/known-bugs') }}">known bugs</a> and a <a href="{{ url('/my-site/cookies') }}">cookie policy</a> <a href=""></a>.</p>
         </div>
     </div>
 @endsection

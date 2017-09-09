@@ -19,6 +19,10 @@ Route::group(['prefix' => 'my-site'], function () {
     Route::any('known-bugs', function () {
         return view('trntbl.bugs');
     });
+
+    Route::any('cookies', function () {
+        return view('trntbl.cookies');
+    });
 });
 
 Route::any('/{username}', 'InterfaceController@showData');
