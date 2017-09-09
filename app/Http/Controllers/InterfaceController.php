@@ -34,7 +34,6 @@ class InterfaceController extends Controller
             'posts' => $paginatedData,
             'total_posts' => $data['total_posts'],
             'offset' => (LengthAwarePaginator::resolveCurrentPage() - 1) * 20,
-            'volume' => isset($_GET['volume'])?$_GET['volume']:0.50,
             'toplay' => isset($_GET['toplay'])?$_GET['toplay']:0,
         ]);
     }
