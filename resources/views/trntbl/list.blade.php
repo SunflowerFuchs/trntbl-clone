@@ -7,7 +7,6 @@
     <div class="masthead clearfix">
         <div class="inner">
             <input type="hidden" value="{{ $offset + 1 }}" id="offset">
-            <input type="hidden" value="{{ $volume }}" id="volume">
             <input type="hidden" value="{{ $total_posts }}" id="total">
             <input type="hidden" value="{{ $toplay }}" id="toplay">
             <audio id="audioplayer" class="center-block"></audio>
@@ -73,9 +72,15 @@
                 $('#shuffle').attr('checked', true);
             }
 
+            var volume = 0.5;
+            var cookieVolume = getCookie("volume");
+            if (cookieVolume !== "") {
+                volume = parseFloat(cookieVolume);
+            }
+
             var player = new MediaElementPlayer('audioplayer', {
                 pluginPath: 'http://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/',
-                startVolume: parseFloat($('#volume').val()),
+                startVolume: volume,
                 success: function (mediaPlayer, node) {
                     mediaPlayer.addEventListener('ended', function(e){
                         currentid += 1;
@@ -84,7 +89,7 @@
                                 currentid = Math.floor(Math.random() * (parseInt($('#total').val()) - 1) + 1);
                                 var pagenum = Math.floor(currentid / 20) + 1;
                                 if (pagenum != parseInt("{!! $posts->currentPage() !!}")) {
-                                    location.href ="{{ url()->current() }}?page=" + pagenum + "&volume=" + mediaPlayer.volume + "&toplay=" + currentid;
+                                    location.href ="{{ url()->current() }}?page=" + pagenum + "&toplay=" + currentid;
                                 } else {
                                     updateMedia(mediaPlayer, $('#audio_source_' + currentid).val());
                                 }
@@ -94,9 +99,13 @@
                         } else {
                             //Load next page, if possible
                             if( "{{ $posts->nextPageUrl() }}".length ) {
-                                location.href = "{{ $posts->nextPageUrl() }}&volume=" + mediaPlayer.volume;
+                                location.href = "{{ $posts->nextPageUrl() }}";
                             }
                         }
+                    });
+
+                    mediaPlayer.addEventListener("volumechange", function () {
+                        setCookie("volume", mediaPlayer.volume, 90);
                     });
 
                     if ($('#audio_source_' + currentid).length) {
@@ -117,6 +126,19 @@
                 $('#artistinfo').text($('#trackname_' + currentid).text() +
                     (($('#trackname_' + currentid).text().trim().length > 0 && $('#artistname_' + currentid).text().trim().length > 0) ? " - " : "") +
                     $('#artistname_' + currentid).text());
+            }
+
+            $('#shuffle').change(function() {
+                if(this.checked) {
+                    setCookie("shuffle", "true");
+                } else {
+                    setCookie("shuffle", "", "01 Jan 1970 00:00:00 UTC");
+                }
+            });
+
+            var shuffle = getCookie("shuffle");
+            if (shuffle !== "") {
+                $('#shuffle').prop('checked', true);
             }
         });
     </script>

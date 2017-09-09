@@ -39,8 +39,15 @@
     <script type="text/javascript">
         $(document).ready(function () {
             $('#user-form').submit(function () {
-                $('#user-form').attr('action', "{{ url('/') }}/" + $('#username').val().toLowerCase());
-            })
+                var username = $('#username').val().toLowerCase();
+                $('#user-form').attr('action', "{{ url('/') }}/" + username);
+                setCookie("username", username, 90);
+            });
+
+            var username = getCookie("username");
+            if (username !== "") {
+                $('#username').val(username);
+            }
         });
     </script>
 @endsection
