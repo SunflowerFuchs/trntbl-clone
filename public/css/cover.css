@@ -212,3 +212,7 @@ body {
     width: 700px;
   }
 }
+
+.pre-scrollable {
+    overflow-y: auto;
+}

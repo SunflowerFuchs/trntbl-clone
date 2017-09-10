@@ -73,16 +73,25 @@ class TumblrAPIController extends Controller
         return false;
     }
 
-    function loadAudioPosts(int $count = 20, int $offset = 0) {
+    function loadAudioPosts(int $count = 20, int $offset = 0, string $tag = null) {
         try {
+            $options = [
+                'api_key' => $this->API_KEY,
+                'limit' => $count,
+                'offset' => $offset,
+                'filter' => 'text',
+            ];
+
+            if ($tag != null) {
+                $options['tag'] = htmlentities($tag);
+            }
+
             $response = $this->guzzle->request('GET', 'blog/' . $this->user . '/posts/audio', [
-                'query' => [
-                    'api_key' => $this->API_KEY,
-                    'limit' => $count,
-                    'offset' => $offset,
-                    'filter' => 'text',
-                ]
+                'query' => $options
             ]);
+
+            $this->log->log(Logger::DEBUG, 'API URL: https://api.tumblr.com/v2/posts/audio?' . http_build_query($options,'','&'));
+
             $data = json_decode($response->getBody(), true)['response'];
             if ($data['total_posts'] == 0) {
                 return view('trntbl.main', [

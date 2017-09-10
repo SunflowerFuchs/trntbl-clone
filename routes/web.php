@@ -26,3 +26,4 @@ Route::group(['prefix' => 'my-site'], function () {
 });
 
 Route::any('/{username}', 'InterfaceController@showData');
+Route::any('/{username}/{tag}', 'InterfaceController@showData');

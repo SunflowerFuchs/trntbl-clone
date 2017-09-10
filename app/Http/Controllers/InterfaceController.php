@@ -17,17 +17,17 @@ class InterfaceController extends Controller
     /** @var  TumblrAPIController */
     private $API;
 
-    function showData(string $username) {
+    function showData(string $username, string $tag = null) {
         $this->API = new TumblrAPIController(strtolower($username));
 
-        $data = $this->loadTumblrData();
+        $data = $this->loadTumblrData($tag);
 
         if ($data instanceof View) {
             return $data;
         }
 
         $paginatedData = new LengthAwarePaginator($data['posts'], $data['total_posts'], 20, LengthAwarePaginator::resolveCurrentPage(), [
-            'path' => '/' . $username,
+            'path' => '/' . $username . ($tag != null ? '/' . $tag : ''),
         ]);
 
         return view('trntbl.list', [
@@ -38,11 +38,11 @@ class InterfaceController extends Controller
         ]);
     }
 
-    function loadTumblrData() {
+    function loadTumblrData(string $tag = null) {
         $result = $this->API->isValidUser();
 
         if ($result === true) {
-            $data = $this->API->loadAudioPosts(20, (LengthAwarePaginator::resolveCurrentPage() - 1) * 20);
+            $data = $this->API->loadAudioPosts(20, (LengthAwarePaginator::resolveCurrentPage() - 1) * 20, $tag);
             return $data;
         } else {
             if ($result instanceof View) {
