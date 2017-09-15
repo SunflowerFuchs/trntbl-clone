@@ -24,7 +24,7 @@
             <tbody id="posts-table-body"></tbody>
         </table>
     </div>
-    <img id="loading" src="/img/loading-bar.gif" style="width:50%; display:block; position:absolute; left:0; right:0; top:50%; margin:auto;">
+    <img id="loading" src="/img/loading-bar.gif" style="display:block; position:absolute; left:0; right:0; top:50%; margin:auto;">
 @endsection
 
 
@@ -91,11 +91,14 @@
             row += '<td id="artist_' + id + '">' + trackartist + '</td>';
 
             //Image
-            if (typeof trackimage !== undefined) {
-                row += '<td><img src="' + trackimage + '" class="img-responsive" style="width: 5rem;"></td>';
+            if (typeof trackimage !== "undefined") {
+                row += '<td><img class="albumart" src="' + trackimage + '" class="img-responsive"></td>';
+            } else {
+                row += '<td></td>';
             }
 
-            row += '<td><a href="' + originalurl + '" target="_blank"><span class="glyphicon glyphicon-share-alt" aria-hidden="true"></span></a></td>';
+            row += '<td><a href="' + originalurl + '" target="_blank"><span class="glyphicon glyphicon-share-alt" aria-hidden="true">' +
+                   '</span></a></td>';
             row += '<input type="hidden" id="source_' + id + '" value="' + trackurl + '">';
             row += '</tr>';
 

@@ -178,6 +178,14 @@ body {
 /*
  * Affix and center
  */
+ #loading {
+	 width: 50%;
+ }
+ 
+.albumart {
+    width: auto;
+    max-width: 10vw;
+}
 
 @media (min-width: 768px) {
   /* Pull out the header and footer */
@@ -202,6 +210,14 @@ body {
 
   #cookieBanner {
       max-width: 20%;
+  }
+  
+  #loading {
+	  width: 25%;
+  }
+
+  .albumart {
+      max-width: 5vw;
   }
 }
 
