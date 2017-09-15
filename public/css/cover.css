@@ -41,8 +41,8 @@ body {
   width: 100%;
   height: 100%; /* For at least Firefox */
   min-height: 100%;
-  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
-          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+  /*-webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.5);*/
 }
 .site-wrapper-inner {
   display: table-cell;
@@ -55,7 +55,7 @@ body {
 
 /* Padding for spacing */
 .inner {
-  padding: 30px;
+  padding: 2em;
 }
 
 
@@ -178,6 +178,14 @@ body {
 /*
  * Affix and center
  */
+ #loading {
+	 width: 50%;
+ }
+ 
+.albumart {
+    width: auto;
+    max-width: 10vw;
+}
 
 @media (min-width: 768px) {
   /* Pull out the header and footer */
@@ -203,6 +211,14 @@ body {
   #cookieBanner {
       max-width: 20%;
   }
+  
+  #loading {
+	  width: 25%;
+  }
+
+  .albumart {
+      max-width: 5vw;
+  }
 }
 
 @media (min-width: 992px) {
@@ -211,4 +227,10 @@ body {
   .cover-container {
     width: 700px;
   }
+}
+
+.pre-scrollable {
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
 }

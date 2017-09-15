@@ -73,16 +73,25 @@ class TumblrAPIController extends Controller
         return false;
     }
 
-    function loadAudioPosts(int $count = 20, int $offset = 0) {
+    function loadAudioPosts(int $count = 20, int $offset = 0, string $tag = null) {
         try {
+            $options = [
+                'api_key' => $this->API_KEY,
+                'limit' => $count,
+                'offset' => $offset,
+                'filter' => 'text',
+            ];
+
+            if ($tag != null) {
+                $options['tag'] = htmlentities($tag);
+            }
+
             $response = $this->guzzle->request('GET', 'blog/' . $this->user . '/posts/audio', [
-                'query' => [
-                    'api_key' => $this->API_KEY,
-                    'limit' => $count,
-                    'offset' => $offset,
-                    'filter' => 'text',
-                ]
+                'query' => $options
             ]);
+
+            $this->log->log(Logger::DEBUG, 'API URL: https://api.tumblr.com/v2/posts/audio?' . http_build_query($options,'','&'));
+
             $data = json_decode($response->getBody(), true)['response'];
             if ($data['total_posts'] == 0) {
                 return view('trntbl.main', [
@@ -96,5 +105,32 @@ class TumblrAPIController extends Controller
                 'error' => 'Couldn\'t load audio posts, maybe tumblrs API is down at the moment...',
             ]);
         }
+    }
+
+    function loadPostByID(string $id) {
+        $options = [
+            'api_key' => $this->API_KEY,
+            'filter' => 'text',
+            'id' => $id,
+        ];
+
+        try {
+            $response = $this->guzzle->request('GET', 'blog/' . $this->user . '/posts/audio', [
+                'query' => $options
+            ]);
+        } catch (RequestException $e) {
+            $this->log->log(Logger::WARNING, 'Tumblr-API not reachable; Error: "' . $e->getMessage() . '"');
+            return view('trntbl.main', [
+                'error' => 'Couldn\'t load audio posts, maybe tumblrs API is down at the moment...',
+            ]);
+        }
+
+        $data = json_decode($response->getBody(), true)['response'];
+        if ($data['total_posts'] == 0) {
+            return view('trntbl.main', [
+                'error' => 'No audio posts found!',
+            ]);
+        }
+        return $data;
     }
 }

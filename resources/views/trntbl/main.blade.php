@@ -17,6 +17,7 @@
         <form class="lead form-inline" action="" method="POST" id="user-form">
             <div class="form-group">
                 <input type="text" class="form-control" id="username" placeholder="Username">
+                <input type="text" class="form-control" id="tag" placeholder="Tag (optional)">
             </div>
             <button type="submit" class="btn btn-default allowConsent" id="btn-listen">Listen</button>
         </form>
@@ -38,15 +39,27 @@
 @section('scripts')
     <script type="text/javascript">
         $(document).ready(function () {
-            $('#user-form').submit(function () {
-                var username = $('#username').val().toLowerCase();
-                $('#user-form').attr('action', "{{ url('/') }}/" + username);
-                setCookie("username", username, 90);
+            var userform  = $('#user-form');
+            var userfield = $('#username');
+            var tagfield  = $('#tag');
+            userform.submit(function () {
+                var username = userfield.val().toLowerCase();
+                var tag      = tagfield.val().toLowerCase();
+                if (username !== "") {
+                    userform.attr('action', "{{ url('/') }}/" + username + (tag !== "" ? "/" + tag : ""));
+                    setCookie("username", username, 90);
+                    setCookie("tag", tag, 90);
+                }
             });
 
-            var username = getCookie("username");
-            if (username !== "") {
-                $('#username').val(username);
+            var userCookie = getCookie("username");
+            if (userCookie !== "") {
+                userfield.val(userCookie);
+            }
+
+            var tagCookie = getCookie("tag");
+            if (tagCookie !== "") {
+                tagfield.val(tagCookie);
             }
         });
     </script>
