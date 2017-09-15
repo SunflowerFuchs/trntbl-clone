@@ -2,7 +2,7 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, shrink-to-fit=no">
 
     @section('stylesheets')
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
@@ -27,7 +27,7 @@
             <div id="cookieBannerClose"><a href="#">x</a></div>
             By continuing to use this site you consent to the use of cookies on your device as described in our cookie policy unless you have disabled them.
             <div id="cookieBannerActions">
-                <a class="noconsent" href="cookies.html">Learn about this website's cookies</a>
+                <a class="noconsent" href="{{ url('/my-site/cookies') }}">Learn about this website's cookies</a>
                 &mdash;
                 <a class="denyConsent noconsent" href="#">Disallow cookies</a>
             </div>
