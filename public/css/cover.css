@@ -41,8 +41,8 @@ body {
   width: 100%;
   height: 100%; /* For at least Firefox */
   min-height: 100%;
-  -webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
-          box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+  /*-webkit-box-shadow: inset 0 0 100px rgba(0,0,0,.5);
+          box-shadow: inset 0 0 100px rgba(0,0,0,.5);*/
 }
 .site-wrapper-inner {
   display: table-cell;
@@ -55,7 +55,7 @@ body {
 
 /* Padding for spacing */
 .inner {
-  padding: 30px;
+  padding: 2em;
 }
 
 
@@ -129,8 +129,63 @@ body {
 
 
 /*
+ * Cookie disclaimer
+ */
+#cookieBanner {
+    display: none;
+    font-size: 1em;
+    width: auto;
+    max-width: 50%;
+    height: auto;
+    max-height: 40%;
+    margin: 0 auto;
+    padding: 1em;
+    background-color: #676767;
+    position: fixed;
+    bottom: 0;
+    right: 1em;
+    z-index: 10000;
+    overflow-y: auto;
+}
+#cookieBannerClose {
+    float: right;
+    position: relative;
+    right: -0.2em;
+    top: -0.8em;
+    font-weight: bold;
+    padding: 4px;
+}
+#cookieBannerActions {
+    text-align: center;
+    padding-top: 0.1em;
+}
+
+
+/*
+ * Cookie policy page
+ */
+.cookies {
+    position: absolute;
+    left: 10%;
+    width: 80%;
+    top: 10%;
+    height: auto;
+    max-height: 90%;
+    overflow-y: auto;
+}
+
+
+/*
  * Affix and center
  */
+ #loading {
+	 width: 50%;
+ }
+ 
+.albumart {
+    width: auto;
+    max-width: 10vw;
+}
 
 @media (min-width: 768px) {
   /* Pull out the header and footer */
@@ -152,6 +207,18 @@ body {
   .cover-container {
     width: 100%; /* Must be percentage or pixels for horizontal alignment */
   }
+
+  #cookieBanner {
+      max-width: 20%;
+  }
+  
+  #loading {
+	  width: 25%;
+  }
+
+  .albumart {
+      max-width: 5vw;
+  }
 }
 
 @media (min-width: 992px) {
@@ -160,4 +227,10 @@ body {
   .cover-container {
     width: 700px;
   }
+}
+
+.pre-scrollable {
+    position: relative;
+    max-height: 80vh;
+    overflow-y: auto;
 }
