@@ -29,7 +29,7 @@
 
 
 @section('scripts')
-    <script src="http://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelement-and-player.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelement-and-player.min.js"></script>
 
     <script type="text/javascript">
         var player;
@@ -117,7 +117,7 @@
             });
 
             player = new MediaElementPlayer('audioplayer', {
-                pluginPath: 'http://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/',
+                pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/',
                 startVolume: volume,
                 success: function (mediaPlayer, node) {
                     mediaPlayer.addEventListener('ended', function(e){
@@ -227,7 +227,7 @@
 
 @section('stylesheets')
     @parent
-    <link rel="stylesheet" href="http://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelementplayer.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelementplayer.min.css">
 
     <style>
         .site-wrapper, .site-wrapper-inner, .cover-container {
