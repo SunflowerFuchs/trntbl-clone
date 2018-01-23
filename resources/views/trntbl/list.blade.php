@@ -34,6 +34,8 @@
     <script type="text/javascript">
         var player;
         var lastid;
+        var tries = 0;
+        var maxRetries = 10;
         var total = 0;
         var currentid = 1;
         var loading = $('#loading');
@@ -127,16 +129,6 @@
                     mediaPlayer.addEventListener("volumechange", function () {
                         setCookie("volume", mediaPlayer.volume, 90);
                     });
-
-                    mediaPlayer.addEventListener("progress", function () {
-                        /*var x = new XMLHttpRequest();
-                        x.open('GET', mediaPlayer.getSrc(), true);
-                        x.onreadystatechange = function () {
-                            console.log(this.getResponseHeader('content-type'));
-                        };
-                        x.send();*/
-                        // TODO: check, if audio can be played, if not, skip or throw an error
-                    });
                 }
             });
         });
@@ -202,7 +194,13 @@
                             }
                             artistinfo.text(name + ((name.trim().length > 0 && artist.trim().length > 0) ? " - " : "") + artist);
                         } else {
-                            artistinfo.text('Couldn\'t load audio, please try again');
+                            if (tries <= maxRetries) {
+                                tries += 1;
+                                updateMedia(source, id + 1);
+                            } else {
+                                tries = 0;
+                                artistinfo.text('Couldn\'t load audio, please try again');
+                            }
                         }
                     });
                     break;
