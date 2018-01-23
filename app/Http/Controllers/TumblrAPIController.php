@@ -27,6 +27,17 @@ class TumblrAPIController extends Controller
     /** @var  Logger */
     public $log;
 
+    /** @var array */
+    private $patterns = [
+        '^https?:\/\/(www\.)?tumblr\.com\/audio_file.*$',
+        '^https?:\/\/a\.tumblr\.com\/tumblr_.*$',
+    ];
+
+    /**
+     * TumblrAPIController constructor.
+     * @param string $username
+     * @throws \Exception
+     */
     function __construct(string $username) {
         $this->user = $username;
 
@@ -93,6 +104,7 @@ class TumblrAPIController extends Controller
             $this->log->log(Logger::DEBUG, 'API URL: https://api.tumblr.com/v2/posts/audio?' . http_build_query($options,'','&'));
 
             $data = json_decode($response->getBody(), true)['response'];
+            $data = $this->filterPosts($data);
             if ($data['total_posts'] == 0) {
                 return view('trntbl.main', [
                     'error' => 'No audio posts found!',
@@ -132,5 +144,25 @@ class TumblrAPIController extends Controller
             ]);
         }
         return $data;
+    }
+
+    function filterPosts(array $data)
+    {
+        $validPosts = ['posts' => []];
+        if (empty($data) || !is_array($data) || empty($data['posts'])) {
+            return [];
+        }
+
+        foreach ($data['posts'] as $key => $post) {
+            foreach ($this->patterns as $pattern) {
+                $pattern = '/' . $pattern. '/';
+                if (preg_match($pattern, $post['audio_url'])) {
+                    $validPosts['posts'][] = $post;
+                    break;
+                }
+            }
+        }
+
+        return array_merge($data, $validPosts);
     }
 }
