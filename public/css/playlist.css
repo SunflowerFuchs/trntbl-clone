@@ -1,0 +1,24 @@
+.mejs__next-button > button,
+.mejs-next-button > button,
+.mejs__prev-button > button,
+.mejs-prev-button > button,
+.mejs__shuffle-button > button,
+.mejs-shuffle-button > button {
+    background: url('../img/playlist-controls.svg') transparent no-repeat;
+}
+.mejs__next-button > button,
+.mejs-next-button > button {
+    background-position: 0 0;
+}
+.mejs__prev-button > button,
+.mejs-prev-button > button {
+    background-position: -20px 0;
+}
+.mejs__shuffle-button > button,
+.mejs-shuffle-button > button {
+    background-position: -100px 0;
+}
+.mejs__shuffle-button.mejs__shuffle-off > button,
+.mejs-shuffle-button.mejs-shuffle-off > button {
+    opacity: 0.7;
+}
