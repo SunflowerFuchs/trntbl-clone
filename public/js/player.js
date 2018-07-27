@@ -91,12 +91,13 @@ $(document).ready(function () {
         features: ['playlist', 'prevtrack', 'nexttrack', 'playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'],
         startVolume: volume,
         success: function (mediaPlayer, node) {
-            mediaPlayer.addEventListener("canplay", function(e){
+            mediaPlayer.addEventListener("progress", function(e){
                 artistinfo.text(player.artistinfo);
+                player.play();
             });
 
             mediaPlayer.addEventListener("ended", function(e){
-                if (e.returnValue) {
+                if (player.loadNext) {
                     loadNextMedia();
                 }
             });
@@ -155,7 +156,7 @@ function updateMedia(source, id) {
                     lastid = data.posts[0].id;
                     var artist = '';
                     var name = '';
-                    var info = '';
+                    var info;
 
                     if (data.posts[0].hasOwnProperty('artist')) {
                         artist = data.posts[0].artist;
@@ -168,6 +169,7 @@ function updateMedia(source, id) {
                     } else if (data.posts[0].hasOwnProperty('summary')) {
                         name = data.posts[0].summary;
                     }
+
                     info = name + ((name.trim().length > 0 && artist.trim().length > 0) ? " - " : "") + artist;
                     player.artistinfo = info;
                     player.setSrc(data.posts[0].audio_url);
