@@ -61,6 +61,7 @@ Object.assign(MediaElementPlayer.prototype, {
             player.historyPos = 0;
             player.playHistory = [];
             player.playHistoryData = [];
+            player.loadNext = true;
 
             player.progressCallback = () => {
                 var newSource = player.getSrc();
@@ -85,9 +86,11 @@ Object.assign(MediaElementPlayer.prototype, {
             };
 
             player.nextPlaylistCallback = () => {
+                player.loadNext = true;
                 if (player.playHistory[++player.historyPos]) {
-                    player.setSrc(player.playHistory[player.historyPos]);
                     player.artistinfo = player.playHistoryData[player.historyPos];
+                    player.loadNext = false;
+                    player.setSrc(player.playHistory[player.historyPos]);
                     player.load();
                 } else {
                     --player.historyPos;
