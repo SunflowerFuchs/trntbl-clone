@@ -156,7 +156,7 @@ class TumblrAPIController extends Controller
         foreach ($data['posts'] as $key => $post) {
             foreach ($this->patterns as $pattern) {
                 $pattern = '/' . $pattern. '/';
-                if (preg_match($pattern, $post['audio_url'])) {
+                if (isset($post['audio_url']) && preg_match($pattern, $post['audio_url'])) {
                     $validPosts['posts'][] = $post;
                     break;
                 }
