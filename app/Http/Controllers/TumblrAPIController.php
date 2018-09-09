@@ -101,11 +101,11 @@ class TumblrAPIController extends Controller
                 'query' => $options
             ]);
 
-            $this->log->log(Logger::DEBUG, 'API URL: https://api.tumblr.com/v2/posts/audio?' . http_build_query($options,'','&'));
+            $this->log->log(Logger::DEBUG, 'API URL: https://api.tumblr.com/v2/blog/' . $this->user . '/posts/audio?' . http_build_query($options,'','&'));
 
             $data = json_decode($response->getBody(), true)['response'];
             $data = $this->filterPosts($data);
-            if ($data['total_posts'] == 0) {
+            if (!isset($data['total_posts']) || $data['total_posts'] == 0) {
                 return view('trntbl.main', [
                     'error' => 'No audio posts found!',
                 ]);
@@ -138,7 +138,7 @@ class TumblrAPIController extends Controller
         }
 
         $data = json_decode($response->getBody(), true)['response'];
-        if ($data['total_posts'] == 0) {
+        if (!isset($data['total_posts']) || $data['total_posts'] == 0) {
             return view('trntbl.main', [
                 'error' => 'No audio posts found!',
             ]);
