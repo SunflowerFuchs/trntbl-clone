@@ -43,8 +43,9 @@
             var userfield = $('#username');
             var tagfield  = $('#tag');
             userform.submit(function () {
-                var username = userfield.val().toLowerCase();
-                var tag      = tagfield.val().toLowerCase();
+                var usernameregex = /(?:https?:\/\/)?([\w\-]+)(?:\.tumblr\.com\/?)?/;
+                var username = userfield.val().toLowerCase().replace(usernameregex, '$1');
+                var tag      = encodeURIComponent(tagfield.val().toLowerCase());
                 if (username !== "") {
                     userform.attr('action', "{{ url('/') }}/" + username + (tag !== "" ? "/" + tag : ""));
                     setCookie("username", username, 90);
