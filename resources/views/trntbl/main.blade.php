@@ -45,9 +45,9 @@
             userform.submit(function () {
                 var usernameregex = /(?:https?:\/\/)?([\w\-]+)(?:\.tumblr\.com\/?)?/;
                 var username = userfield.val().toLowerCase().replace(usernameregex, '$1');
-                var tag      = encodeURIComponent(tagfield.val().toLowerCase());
+                var tag      = tagfield.val().toLowerCase();
                 if (username !== "") {
-                    userform.attr('action', "{{ url('/') }}/" + username + (tag !== "" ? "/" + tag : ""));
+                    userform.attr('action', "{{ url('/') }}/" + username + "/" + encodeURIComponent(tag));
                     setCookie("username", username, 90);
                     setCookie("tag", tag, 90);
                 }
