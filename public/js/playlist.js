@@ -22,11 +22,11 @@ Object.assign(MediaElementPlayer.prototype, {
     /**
      * @param {MediaElementPlayer} player
      */
-    buildprevtrack(player) {
+    buildprevtrack: function(player) {
         const prevTitle = 'Previous';
         player.prevButton = document.createElement('div');
-        player.prevButton.className = `${player.options.classPrefix}button ${player.options.classPrefix}prev-button`;
-        player.prevButton.innerHTML = `<button type="button" aria-controls="${player.id}" title="${prevTitle}" aria-label="${prevTitle}" tabindex="0"></button>`;
+        player.prevButton.className = player.options.classPrefix + 'button ' + player.options.classPrefix + 'prev-button';
+        player.prevButton.innerHTML = '<button type="button" aria-controls="' + player.id + '" title="' + prevTitle + '" aria-label="' + prevTitle + '" tabindex="0"></button>';
 
         player.prevButton.addEventListener('click', function() {
             player.prevPlaylistTrack(player);
@@ -37,11 +37,11 @@ Object.assign(MediaElementPlayer.prototype, {
     /**
      * @param {MediaElementPlayer} player
      */
-    buildnexttrack(player) {
+    buildnexttrack: function(player) {
         const nextTitle = 'Next';
         player.nextButton = document.createElement('div');
-        player.nextButton.className = `${player.options.classPrefix}button ${player.options.classPrefix}next-button`;
-        player.nextButton.innerHTML = `<button type="button" aria-controls="${player.id}" title="${nextTitle}" aria-label="${nextTitle}" tabindex="0"></button>`;
+        player.nextButton.className = player.options.classPrefix + 'button ' + player.options.classPrefix + 'next-button';
+        player.nextButton.innerHTML = '<button type="button" aria-controls="' + player.id + '" title="' + nextTitle + '" aria-label="' + nextTitle + '" tabindex="0"></button>';
 
         player.nextButton.addEventListener('click', function() {
             player.nextPlaylistTrack(player);
@@ -58,7 +58,7 @@ Object.assign(MediaElementPlayer.prototype, {
      * @param {String} source
      * @param {String} artistinfo
      */
-    addToHistory(player, source, artistinfo) {
+    addToHistory: function(player, source, artistinfo) {
         if (player.playHistory[player.historyPos] !== source) {
             player.historyPos = this.addToPlaylist(player, source, artistinfo);
         }
@@ -67,7 +67,7 @@ Object.assign(MediaElementPlayer.prototype, {
     /**
      * @param {MediaElementPlayer} player
      */
-    prevPlaylistTrack(player) {
+    prevPlaylistTrack: function(player) {
         if ((player.duration > 10 && player.currentTime > (player.duration / 10)) || player.historyPos === 0) {
             player.currentTime = 0;
             return true;
@@ -85,7 +85,7 @@ Object.assign(MediaElementPlayer.prototype, {
     /**
      * @param {MediaElementPlayer} player
      */
-    nextPlaylistTrack(player) {
+    nextPlaylistTrack: function(player) {
         if (player.playHistory[++player.historyPos]) {
             player.artistinfo = player.playHistoryData[player.historyPos];
             player.setSrc(player.playHistory[player.historyPos]);
@@ -106,7 +106,7 @@ Object.assign(MediaElementPlayer.prototype, {
      * @param {String} artistinfo
      * @param {number} [position]
      */
-    addToPlaylist(player, source, artistinfo, position) {
+    addToPlaylist: function(player, source, artistinfo, position) {
         if (typeof position === "undefined") position = player.historyPos + 1;
         else if (position <= -1) position = player.playHistory.length - (++position);
 
