@@ -10,101 +10,103 @@ Object.assign(mejs.MepDefaults, {
 
 Object.assign(MediaElementPlayer.prototype, {
 
-    playbacksExist: false,
+    valuesInitialized: false,
+    historyPos: -1,
+    playHistory: [],
+    playHistoryData: [],
+
+    /*
+     * Here cometh the feature constructors
+     */
 
     /**
-     * Feature constructor.
-     *
      * @param {MediaElementPlayer} player
-     * @param {HTMLElement} controls
-     * @param {HTMLElement} layers
-     * @param {HTMLElement} media
      */
-    buildplaylist(player, controls, layers, media) {
-        this.createPlaybacks(player);
-
-        // add to playlist once its loaded
-        media.addEventListener("progress", player.progressCallback);
-
-        // Once current element has ended, proceed to play next one
-        media.addEventListener('ended', player.nextPlaylistCallback);
-    },
-
     buildprevtrack(player) {
-        this.createPlaybacks(player);
-
         const prevTitle = 'Previous';
         player.prevButton = document.createElement('div');
         player.prevButton.className = `${player.options.classPrefix}button ${player.options.classPrefix}prev-button`;
         player.prevButton.innerHTML = `<button type="button" aria-controls="${player.id}" title="${prevTitle}" aria-label="${prevTitle}" tabindex="0"></button>`;
 
-        player.prevButton.addEventListener('click', player.prevPlaylistCallback);
+        player.prevButton.addEventListener('click', function() {
+            player.prevPlaylistTrack(player);
+        });
         player.addControlElement(player.prevButton, 'prevtrack');
     },
 
+    /**
+     * @param {MediaElementPlayer} player
+     */
     buildnexttrack(player) {
-        this.createPlaybacks(player);
-
         const nextTitle = 'Next';
         player.nextButton = document.createElement('div');
         player.nextButton.className = `${player.options.classPrefix}button ${player.options.classPrefix}next-button`;
         player.nextButton.innerHTML = `<button type="button" aria-controls="${player.id}" title="${nextTitle}" aria-label="${nextTitle}" tabindex="0"></button>`;
 
-        player.nextButton.addEventListener('click', player.nextPlaylistCallback);
+        player.nextButton.addEventListener('click', function() {
+            player.nextPlaylistTrack(player);
+        });
         player.addControlElement(player.nextButton, 'nexttrack');
     },
 
-    createPlaybacks(player) {
-        if (!this.playbacksExist) {
-            this.playbacksExist = true;
+    /*
+     * Let the actual functions begin
+     */
 
-            player.historyPos = -1;
-            player.playHistory = [];
-            player.playHistoryData = [];
-            player.loadNext = true;
-
-            player.progressCallback = () => {
-                var newSource = player.getSrc();
-                var artistinfo = player.artistinfo;
-                if (player.playHistory[player.historyPos] !== newSource) {
-                    player.historyPos = this.addToPlaylist(newSource, artistinfo);
-                }
-            };
-
-            player.prevPlaylistCallback = () => {
-                if ((player.duration > 10 && player.currentTime > (player.duration / 10)) || player.historyPos === 0) {
-                    player.currentTime = 0;
-                } else if (player.playHistory[--player.historyPos]) {
-                    player.setSrc(player.playHistory[player.historyPos]);
-                    player.artistinfo = player.playHistoryData[player.historyPos];
-                    player.load();
-                } else {
-                    ++player.historyPos;
-                }
-            };
-
-            player.nextPlaylistCallback = () => {
-                player.loadNext = true;
-                if (player.playHistory[++player.historyPos]) {
-                    player.artistinfo = player.playHistoryData[player.historyPos];
-                    player.loadNext = false;
-                    player.setSrc(player.playHistory[player.historyPos]);
-                    player.load();
-                } else {
-                    --player.historyPos;
-                    if (player.duration > 0.10) {
-                        player.currentTime = player.duration - 0.10;
-                    }
-                }
-            };
-
-            player.addToQueue = (source, artistinfo) => {
-                this.addToPlaylist(source, artistinfo, -1);
-            }
+    /**
+     * @param {MediaElementPlayer} player
+     * @param {String} source
+     * @param {String} artistinfo
+     */
+    addToHistory(player, source, artistinfo) {
+        if (player.playHistory[player.historyPos] !== source) {
+            player.historyPos = this.addToPlaylist(player, source, artistinfo);
         }
     },
 
-    addToPlaylist(source, artistinfo, position) {
+    /**
+     * @param {MediaElementPlayer} player
+     */
+    prevPlaylistTrack(player) {
+        if ((player.duration > 10 && player.currentTime > (player.duration / 10)) || player.historyPos === 0) {
+            player.currentTime = 0;
+            return true;
+        } else if (player.playHistory[player.historyPos - 1]) {
+            player.historyPos--;
+            player.setSrc(player.playHistory[player.historyPos]);
+            player.artistinfo = player.playHistoryData[player.historyPos];
+            player.load();
+            return true;
+        }
+
+        return false;
+    },
+
+    /**
+     * @param {MediaElementPlayer} player
+     */
+    nextPlaylistTrack(player) {
+        if (player.playHistory[++player.historyPos]) {
+            player.artistinfo = player.playHistoryData[player.historyPos];
+            player.setSrc(player.playHistory[player.historyPos]);
+            player.load();
+            return true;
+        } else {
+            --player.historyPos;
+            if (player.duration > 0.10) {
+                player.currentTime = player.duration - 0.10;
+            }
+            return false;
+        }
+    },
+
+    /**
+     * @param {MediaElementPlayer} player
+     * @param {String} source
+     * @param {String} artistinfo
+     * @param {number} [position]
+     */
+    addToPlaylist(player, source, artistinfo, position) {
         if (typeof position === "undefined") position = player.historyPos + 1;
         else if (position <= -1) position = player.playHistory.length - (++position);
 

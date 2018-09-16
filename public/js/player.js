@@ -17,6 +17,41 @@ if (cookieVolume !== "") {
     volume = parseFloat(cookieVolume);
 }
 
+$(document).ready(function () {
+    $('.pre-scrollable').scroll(function () {
+        if (loading.css('display') === 'none' && Math.ceil($(this).scrollTop() + $(this).height())>=$(this)[0].scrollHeight) {
+            loadPage(currentid++);
+        }
+    });
+
+    player = new MediaElementPlayer('audioplayer', {
+        pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/',
+        features: ['playlist', 'prevtrack', 'nexttrack', 'playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'],
+        startVolume: volume,
+        autoplay: true,
+        success: function (mediaPlayer) {
+            mediaPlayer.addEventListener("play", function(){
+                player.addToHistory(player, player.getSrc(), player.artistinfo);
+                artistinfo.text(player.artistinfo);
+                player.play();
+            });
+
+            mediaPlayer.addEventListener("ended", function(){
+                loadNextMedia();
+            });
+
+            mediaPlayer.addEventListener("volumechange", function () {
+                volume = player.getVolume();
+                setCookie("volume", volume, 90);
+            });
+
+            loadPage(currentid++).then(function () {
+                loadNextMedia();
+            });
+        }
+    });
+});
+
 function loadPage(pagenum) {
     loading.show();
 
@@ -44,7 +79,7 @@ function loadPage(pagenum) {
 
         loading.hide();
 
-        $('.glyphicon-play').click(function () {
+        $('.glyphicon-play').on('click', function () {
             updateMedia('id', $( this ).parent().attr('id'));
         });
 
@@ -76,77 +111,42 @@ function createListItem(button, id, trackname, trackartist, trackurl, originalur
     row += '<span role="button" id="dd_\' + id + \'" data-toggle="dropdown" class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>';
     row += '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dd_' + id + '">';
     row += '<li><a href="' + originalurl + '" target="_blank">Open post</a></li>';
-    row += '<li><a role="button" class="queue">Add to queue</a></li>';
+    row += '<li class="queue"><a role="button">Add to queue</a></li>';
     row += '</ul></div></td>';
     row += '<input type="hidden" id="source_' + id + '" value="' + trackurl + '">';
     row += '</tr>';
 
     tablebody.append(row);
     tablebody.find('#submenu_' + id + ' .queue').on('click', function () {
-        player.addToQueue(trackurl, tempinfo);
+        player.addToPlaylist(player, trackurl, tempinfo, -1);
     });
 
 }
 
-$(document).ready(function () {
-    $('.pre-scrollable').scroll(function () {
-        if (loading.css('display') === 'none' && Math.ceil($(this).scrollTop() + $(this).height())>=$(this)[0].scrollHeight) {
-            loadPage(currentid++);
-        }
-    });
-
-    player = new MediaElementPlayer('audioplayer', {
-        pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/',
-        features: ['playlist', 'prevtrack', 'nexttrack', 'playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'],
-        startVolume: volume,
-        autoplay: true,
-        success: function (mediaPlayer, node) {
-            mediaPlayer.addEventListener("progress", function(e){
-                mediaPlayer.setVolume(volume);
-                artistinfo.text(player.artistinfo);
-                player.play();
-            });
-
-            mediaPlayer.addEventListener("ended", function(e){
-                if (player.loadNext) {
-                    loadNextMedia();
-                }
-            });
-
-            mediaPlayer.addEventListener("volumechange", function () {
-                volume = player.getVolume();
-                setCookie("volume", volume, 90);
-            });
-
-            loadPage(currentid++).then(function () {
-                loadNextMedia();
-            });
-        }
-    });
-});
-
 function loadNextMedia() {
     var next;
-    if (shuffle[0].checked) {
-        var offset = Math.floor(Math.random() * (total - 1));
-        updateMedia('offset', offset);
-    } else if(typeof lastid === "undefined") {
-        updateMedia('offset', 0);
-    } else {
-        var current = $('#' + lastid);
-        if (current.parent().nextAll('tr').length === 0) {
-            loadPage(currentid++).then(function (data) {
-                if (data.posts.data.length === 0) {
-                    next = current.parent().parent().children().first().children().first();
-                } else {
-                    next = current.parent().next().children().first();
-                }
-
-                updateMedia('id', next.attr('id'));
-            });
+    if (!player.nextPlaylistTrack(player)) { // check if we have something in our playlist, and if yes, play it
+        if (shuffle[0].checked) {
+            var offset = Math.floor(Math.random() * (total - 1));
+            updateMedia('offset', offset);
+        } else if (typeof lastid === "undefined") {
+            updateMedia('offset', 0);
         } else {
-            next = current.parent().next().children().first();
-            updateMedia('id', next.attr('id'));
+            var current = $('#' + lastid);
+            if (current.parent().nextAll('tr').length === 0) {
+                loadPage(currentid++).then(function (data) {
+                    if (data.posts.data.length === 0) {
+                        next = current.parent().parent().children().first().children().first();
+                    } else {
+                        next = current.parent().next().children().first();
+                    }
+
+                    updateMedia('id', next.attr('id'));
+                });
+            } else {
+                next = current.parent().next().children().first();
+                updateMedia('id', next.attr('id'));
+            }
         }
     }
 }
@@ -204,7 +204,7 @@ function updateMedia(source, id) {
     }
 }
 
-shuffle.change(function() {
+shuffle.on('change', function() {
     if(this.checked) {
         setCookie("shuffle", "true");
     } else {
