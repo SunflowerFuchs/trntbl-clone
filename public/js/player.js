@@ -17,8 +17,45 @@ if (cookieVolume !== "") {
     volume = parseFloat(cookieVolume);
 }
 
+$(document).ready(function () {
+    $('.pre-scrollable').scroll(function () {
+        if (loading.css('display') === 'none' && Math.ceil($(this).scrollTop() + $(this).height())>=$(this)[0].scrollHeight) {
+            loadPage(currentid++);
+        }
+    });
+
+    player = new MediaElementPlayer('audioplayer', {
+        pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/',
+        features: ['playlist', 'prevtrack', 'nexttrack', 'playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'],
+        startVolume: volume,
+        autoplay: true,
+        success: function (mediaPlayer) {
+            mediaPlayer.addEventListener("play", function(){
+                player.addToHistory(player, player.getSrc(), player.artistinfo);
+                artistinfo.text(player.artistinfo);
+                player.play();
+            });
+
+            mediaPlayer.addEventListener("ended", function(){
+                loadNextMedia();
+            });
+
+            mediaPlayer.addEventListener("volumechange", function () {
+                volume = player.getVolume();
+                setCookie("volume", volume, 90);
+            });
+
+            loadPage(currentid++).then(function () {
+                loadNextMedia();
+            });
+        }
+    });
+});
+
 function loadPage(pagenum) {
     loading.show();
+
+    params = params.replace(/#.+/, ''); // remove hash, if any is set. prevents parameters otherwise
 
     return $.getJSON(apiurl + params + "?page=" + pagenum, function (data) {
         data.posts.data.forEach(function (post) {
@@ -42,7 +79,7 @@ function loadPage(pagenum) {
 
         loading.hide();
 
-        $('.glyphicon-play').click(function () {
+        $('.glyphicon-play').on('click', function () {
             updateMedia('id', $( this ).parent().attr('id'));
         });
 
@@ -55,6 +92,9 @@ function loadPage(pagenum) {
 }
 
 function createListItem(button, id, trackname, trackartist, trackurl, originalurl, trackimage) {
+    var tablebody = $('#posts-table-body');
+    var tempinfo = trackname + ((trackname.trim().length > 0 && trackartist.trim().length > 0) ? " - " : "") + trackartist;
+
     var row = "<tr>";
     row += '<td id="' + id + '"><span class="glyphicon ' + button + '" aria-hidden="true"></span></td>';
     row += '<td id="name_' + id + '">' + trackname + '</td>';
@@ -67,70 +107,46 @@ function createListItem(button, id, trackname, trackartist, trackurl, originalur
         row += '<td></td>';
     }
 
-    row += '<td><a href="' + originalurl + '" target="_blank"><span class="glyphicon glyphicon-share-alt" aria-hidden="true">' +
-        '</span></a></td>';
+    row += '<td id="submenu_' + id + '"><div style="position: relative;">';
+    row += '<span role="button" id="dd_\' + id + \'" data-toggle="dropdown" class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>';
+    row += '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dd_' + id + '">';
+    row += '<li><a href="' + originalurl + '" target="_blank">Open post</a></li>';
+    row += '<li class="queue"><a role="button">Add to queue</a></li>';
+    row += '</ul></div></td>';
     row += '<input type="hidden" id="source_' + id + '" value="' + trackurl + '">';
     row += '</tr>';
 
-    $('#posts-table-body').append(row);
+    tablebody.append(row);
+    tablebody.find('#submenu_' + id + ' .queue').on('click', function () {
+        player.addToPlaylist(player, trackurl, tempinfo, -1);
+    });
+
 }
-
-$(document).ready(function () {
-    loadPage(currentid++).then(function (data) {
-        loadNextMedia();
-    });
-
-    $('.pre-scrollable').scroll(function () {
-        if (loading.css('display') === 'none' && Math.ceil($(this).scrollTop() + $(this).height())>=$(this)[0].scrollHeight) {
-            loadPage(currentid++);
-        }
-    });
-
-    player = new MediaElementPlayer('audioplayer', {
-        pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/',
-        features: ['playlist', 'prevtrack', 'nexttrack', 'playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'],
-        startVolume: volume,
-        success: function (mediaPlayer, node) {
-            mediaPlayer.addEventListener("progress", function(e){
-                artistinfo.text(player.artistinfo);
-                player.play();
-            });
-
-            mediaPlayer.addEventListener("ended", function(e){
-                if (player.loadNext) {
-                    loadNextMedia();
-                }
-            });
-
-            mediaPlayer.addEventListener("volumechange", function () {
-                setCookie("volume", mediaPlayer.volume, 90);
-            });
-        }
-    });
-});
 
 function loadNextMedia() {
     var next;
-    if (shuffle[0].checked) {
-        var offset = Math.floor(Math.random() * (total - 1));
-        updateMedia('offset', offset);
-    } else if(typeof lastid === "undefined") {
-        updateMedia('offset', 0);
-    } else {
-        var current = $('#' + lastid);
-        if (current.parent().nextAll('tr').length === 0) {
-            loadPage(currentid++).then(function (data) {
-                if (data.posts.data.length === 0) {
-                    next = current.parent().parent().children().first().children().first();
-                } else {
-                    next = current.parent().next().children().first();
-                }
-
-                updateMedia('id', next.attr('id'));
-            });
+    if (!player.nextPlaylistTrack(player)) { // check if we have something in our playlist, and if yes, play it
+        if (shuffle[0].checked) {
+            var offset = Math.floor(Math.random() * (total - 1));
+            updateMedia('offset', offset);
+        } else if (typeof lastid === "undefined") {
+            updateMedia('offset', 0);
         } else {
-            next = current.parent().next().children().first();
-            updateMedia('id', next.attr('id'));
+            var current = $('#' + lastid);
+            if (current.parent().nextAll('tr').length === 0) {
+                loadPage(currentid++).then(function (data) {
+                    if (data.posts.data.length === 0) {
+                        next = current.parent().parent().children().first().children().first();
+                    } else {
+                        next = current.parent().next().children().first();
+                    }
+
+                    updateMedia('id', next.attr('id'));
+                });
+            } else {
+                next = current.parent().next().children().first();
+                updateMedia('id', next.attr('id'));
+            }
         }
     }
 }
@@ -188,7 +204,7 @@ function updateMedia(source, id) {
     }
 }
 
-shuffle.change(function() {
+shuffle.on('change', function() {
     if(this.checked) {
         setCookie("shuffle", "true");
     } else {
