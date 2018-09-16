@@ -58,18 +58,16 @@ Object.assign(MediaElementPlayer.prototype, {
         if (!this.playbacksExist) {
             this.playbacksExist = true;
 
-            player.historyPos = 0;
+            player.historyPos = -1;
             player.playHistory = [];
             player.playHistoryData = [];
             player.loadNext = true;
 
             player.progressCallback = () => {
                 var newSource = player.getSrc();
+                var artistinfo = player.artistinfo;
                 if (player.playHistory[player.historyPos] !== newSource) {
-                    player.playHistory.splice(++player.historyPos, player.playHistory.length - player.historyPos);
-                    player.playHistoryData.splice(player.historyPos, player.playHistoryData.length - player.historyPos);
-                    player.historyPos = player.playHistory.push(newSource) - 1;
-                    player.playHistoryData.push(player.artistinfo);
+                    player.historyPos = this.addToPlaylist(newSource, artistinfo);
                 }
             };
 
@@ -99,6 +97,20 @@ Object.assign(MediaElementPlayer.prototype, {
                     }
                 }
             };
+
+            player.addToQueue = (source, artistinfo) => {
+                this.addToPlaylist(source, artistinfo, -1);
+            }
         }
     },
+
+    addToPlaylist(source, artistinfo, position) {
+        if (typeof position === "undefined") position = player.historyPos + 1;
+        else if (position <= -1) position = player.playHistory.length - (++position);
+
+        player.playHistory.splice(position, player.playHistory.length - position);
+        player.playHistoryData.splice(position, player.playHistoryData.length - position);
+        player.playHistoryData.push(artistinfo);
+        return player.playHistory.push(source) - 1;
+    }
 });

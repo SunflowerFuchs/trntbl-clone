@@ -20,6 +20,8 @@ if (cookieVolume !== "") {
 function loadPage(pagenum) {
     loading.show();
 
+    params = params.replace(/#.+/, ''); // remove hash, if any is set. prevents parameters otherwise
+
     return $.getJSON(apiurl + params + "?page=" + pagenum, function (data) {
         data.posts.data.forEach(function (post) {
             var artist = '';
@@ -55,6 +57,9 @@ function loadPage(pagenum) {
 }
 
 function createListItem(button, id, trackname, trackartist, trackurl, originalurl, trackimage) {
+    var tablebody = $('#posts-table-body');
+    var tempinfo = trackname + ((trackname.trim().length > 0 && trackartist.trim().length > 0) ? " - " : "") + trackartist;
+
     var row = "<tr>";
     row += '<td id="' + id + '"><span class="glyphicon ' + button + '" aria-hidden="true"></span></td>';
     row += '<td id="name_' + id + '">' + trackname + '</td>';
@@ -67,19 +72,23 @@ function createListItem(button, id, trackname, trackartist, trackurl, originalur
         row += '<td></td>';
     }
 
-    row += '<td><a href="' + originalurl + '" target="_blank"><span class="glyphicon glyphicon-share-alt" aria-hidden="true">' +
-        '</span></a></td>';
+    row += '<td id="submenu_' + id + '"><div style="position: relative;">';
+    row += '<span role="button" id="dd_\' + id + \'" data-toggle="dropdown" class="glyphicon glyphicon-option-horizontal" aria-hidden="true"></span>';
+    row += '<ul class="dropdown-menu dropdown-menu-right" aria-labelledby="dd_' + id + '">';
+    row += '<li><a href="' + originalurl + '" target="_blank">Open post</a></li>';
+    row += '<li><a role="button" class="queue">Add to queue</a></li>';
+    row += '</ul></div></td>';
     row += '<input type="hidden" id="source_' + id + '" value="' + trackurl + '">';
     row += '</tr>';
 
-    $('#posts-table-body').append(row);
+    tablebody.append(row);
+    tablebody.find('#submenu_' + id + ' .queue').on('click', function () {
+        player.addToQueue(trackurl, tempinfo);
+    });
+
 }
 
 $(document).ready(function () {
-    loadPage(currentid++).then(function (data) {
-        loadNextMedia();
-    });
-
     $('.pre-scrollable').scroll(function () {
         if (loading.css('display') === 'none' && Math.ceil($(this).scrollTop() + $(this).height())>=$(this)[0].scrollHeight) {
             loadPage(currentid++);
@@ -90,8 +99,10 @@ $(document).ready(function () {
         pluginPath: 'https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/',
         features: ['playlist', 'prevtrack', 'nexttrack', 'playpause', 'current', 'progress', 'duration', 'tracks', 'volume', 'fullscreen'],
         startVolume: volume,
+        autoplay: true,
         success: function (mediaPlayer, node) {
             mediaPlayer.addEventListener("progress", function(e){
+                mediaPlayer.setVolume(volume);
                 artistinfo.text(player.artistinfo);
                 player.play();
             });
@@ -103,7 +114,12 @@ $(document).ready(function () {
             });
 
             mediaPlayer.addEventListener("volumechange", function () {
-                setCookie("volume", mediaPlayer.volume, 90);
+                volume = player.getVolume();
+                setCookie("volume", volume, 90);
+            });
+
+            loadPage(currentid++).then(function () {
+                loadNextMedia();
             });
         }
     });
