@@ -58,20 +58,28 @@ function loadPage(pagenum) {
     params = params.replace(/#.+/, ''); // remove hash, if any is set. prevents parameters otherwise
 
     return $.getJSON(apiurl + params + "?page=" + pagenum, function (data) {
+        if (typeof data.posts === "undefined") {
+            var message = 'No more posts!';
+            if (pagenum === 1) message = 'No posts found!';
+            loading.after($('<div>' + message + '</div><br><a href="/"><b>Back</b></a>'));
+            loading.remove();
+            return;
+        }
+
         data.posts.data.forEach(function (post) {
             var artist = '';
             var name = '';
 
             if (post.hasOwnProperty('artist')) {
-                artist = post.artist;
+                artist = post.artist.toString();
             } else if(post.hasOwnProperty('source_title')) {
-                artist = '@' + post.source_title;
+                artist = '@' + post.source_title.toString();
             }
 
             if (post.hasOwnProperty('track_name')) {
-                name = post.track_name;
+                name = post.track_name.toString();
             } else if (post.hasOwnProperty('summary')) {
-                name = post.summary;
+                name = post.summary.toString();
             }
 
             createListItem('glyphicon-play', post.id, name, artist, post.audio_url, post.post_url, (post.album_art));
@@ -92,6 +100,10 @@ function loadPage(pagenum) {
 }
 
 function createListItem(button, id, trackname, trackartist, trackurl, originalurl, trackimage) {
+    if (typeof id === "undefined") return;
+    if (typeof trackname === "undefined") trackname = '';
+    if (typeof trackartist === "undefined") trackartist = '';
+
     var tablebody = $('#posts-table-body');
     var tempinfo = trackname + ((trackname.trim().length > 0 && trackartist.trim().length > 0) ? " - " : "") + trackartist;
 
