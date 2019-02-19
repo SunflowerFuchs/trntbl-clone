@@ -30,7 +30,7 @@
     <div class="mastfoot">
         <div class="inner">
             <p>Original idea by <a href="http://blog.trntbl.me/">trntbl</a>, this page was made by <a href="http://egoisticalgoat.tumblr.com">me</a>.</p>
-            <p>You can contact me at <a href="http://egoisticalgoat.tumblr.com">my blog</a> or via <a rel="me" href="https://quey.org/@EgoisticalGoat">Mastodon</a>.
+            <p>The easiest way to contact me is on <a href="http://egoisticalgoat.tumblr.com">tumblr</a><span style="display: none"> or via <a rel="me" href="https://quey.org/@EgoisticalGoat">Mastodon</a></span>.
             I also have a list of <a href="{{ url('/my-site/known-bugs') }}">known bugs</a> and a <a href="{{ url('/my-site/cookies') }}">cookie policy</a> <a href=""></a>.</p>
         </div>
     </div>
