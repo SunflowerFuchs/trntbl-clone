@@ -1,4 +1,8 @@
 function setCookie(cname, cvalue, exdays) {
+    if (typeof Consent !== "undefined" && typeof Consent.hasConsent !== "undefined" && typeof Consent.cookie !== "undefined") {
+        if (cname != Consent.cookie && Consent.hasConsent() === false) return; // don't set cookies if cookie consent has been revoked
+    }
+
     var d = new Date();
     d.setTime(d.getTime() + (exdays * 24 * 60 * 60 * 1000));
     var expires = "expires="+d.toUTCString();
@@ -18,4 +22,12 @@ function getCookie(cname) {
         }
     }
     return "";
+}
+
+function deleteAllCookies() {
+    if (document.cookie == "") return;
+    var cookies = document.cookie.split(";");
+    cookies.forEach(function(c) {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
 }

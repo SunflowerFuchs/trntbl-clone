@@ -9,11 +9,15 @@
         </div>
     </div>
     <div class="inner cover">
+        <h1 class="cover-heading">Supported sources</h1>
+        <ul style="display: inline-block; text-align: left">
+            <li>Currently, only audio posts directly from tumblr (not embedded from soundcloud, spotify, etc.) can be played.</li>
+        </ul>
         <h1 class="cover-heading">Known bugs</h1>
         <ul style="display: inline-block; text-align: left">
+            <li>When you haven't accepted cookies on tumblr yet, the audio files will fail to load</li>
             <li>When disabling shuffle, you start from the beginning of the list</li>
             <li>Play button is hard to hit on some devices</li>
-            <li>Soundcloud posts are currently not playable, and i can't change that until Soundcloud reopens API-applications</li>
         </ul>
         <h1 class="cover-heading">Planned features</h1>
         <ul style="display: inline-block; text-align: left">
