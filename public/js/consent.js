@@ -18,7 +18,8 @@ $(document).ready(function() {
     }
 
     function denyConsent() {
-        setCookie("Consent denied", "You disallowed the use of cookies.", "false");
+        // disabled deny cookie; if the user denies, we don't want ANY cookies set
+        // setCookie("Consent denied", "You disallowed the use of cookies.", "false");
         // Unbind consent-granting actions
         $(window).unbind("scroll");
         $("a:not(.noconsent)").unbind("click");
