@@ -43,3 +43,4 @@ RUN chmod uga+x /usr/local/bin/install-php-extensions && sync && \
     zip
 #    zlib
 
+WORKDIR /app

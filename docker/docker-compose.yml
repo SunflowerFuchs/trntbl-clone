@@ -1,0 +1,22 @@
+version: "3.7"
+
+services:
+    php:
+        build: ./php
+        image: trntbl-php:latest
+        container_name: trntbl-php
+        volumes:
+            - "./../:/app"
+        networks:
+            - trntbl-php
+    nginx:
+        image: nginx:latest
+        container_name: trntbl-nginx
+        volumes:
+            - "./../:/app"
+        networks:
+            - trntbl-php
+
+networks:
+    trntbl-php:
+        internal: true
