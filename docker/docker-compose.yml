@@ -8,15 +8,17 @@ services:
         volumes:
             - "./../:/app"
         networks:
-            - trntbl-php
+            - trntbl
     nginx:
         image: nginx:latest
         container_name: trntbl-nginx
         volumes:
             - "./../:/app"
+            - "./nginx/:/etc/nginx/conf.d/"
+        ports:
+            - "8080:80"
         networks:
-            - trntbl-php
+            - trntbl
 
 networks:
-    trntbl-php:
-        internal: true
+    trntbl:

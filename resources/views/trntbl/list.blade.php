@@ -32,8 +32,8 @@
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelement-and-player.min.js"></script>
 
-    <script src="{{ asset('js/playlist.js', true) }}?cbr={{ File::lastModified( public_path() . '/js/playlist.js' )  }}"></script>
-    <script src="{{ asset('js/player.js', true) }}?cbr={{ File::lastModified( public_path() . '/js/player.js' )  }}"></script>
+    <script src="{{ asset('js/playlist.js') }}?cbr={{ File::lastModified( public_path() . '/js/playlist.js' )  }}"></script>
+    <script src="{{ asset('js/player.js') }}?cbr={{ File::lastModified( public_path() . '/js/player.js' )  }}"></script>
 @endsection
 
 @section('stylesheets')
