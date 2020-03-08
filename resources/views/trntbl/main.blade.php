@@ -32,6 +32,8 @@
             <p>Original idea by <a href="http://blog.trntbl.me/">trntbl</a>, this page was made by <a href="http://egoisticalgoat.tumblr.com">me</a>.</p>
             <p>The easiest way to contact me is on <a href="http://egoisticalgoat.tumblr.com">tumblr</a><span style="display: none"> or via <a rel="me" href="https://quey.org/@EgoisticalGoat">Mastodon</a></span>.
             I also have a list of <a href="{{ url('/my-site/known-bugs') }}">known bugs</a> and a <a href="{{ url('/my-site/cookies') }}">cookie policy</a> <a href=""></a>.</p>
+
+            <script type='text/javascript' src='https://ko-fi.com/widgets/widget_2.js'></script><script type='text/javascript'>kofiwidget2.init('Support Me on Ko-fi', '#29abe0', 'A0A01HI69');kofiwidget2.draw();</script>
         </div>
     </div>
 @endsection
