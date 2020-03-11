@@ -1,7 +1,7 @@
 version: "3.7"
 
 services:
-    php:
+    trntbl-php:
         build: ./php
         image: trntbl-php:latest
         container_name: trntbl-php
@@ -9,9 +9,11 @@ services:
             - "./../:/app"
         networks:
             - trntbl
-    nginx:
+    trntbl-nginx:
         image: nginx:latest
         container_name: trntbl-nginx
+        depends_on:
+            - trntbl-php
         volumes:
             - "./../:/app"
             - "./nginx/:/etc/nginx/conf.d/"
