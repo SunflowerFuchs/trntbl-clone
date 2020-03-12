@@ -118,10 +118,11 @@ sudo=""
 if [[ "$(id -u)" -ne 0 ]]; then
     # if the current user is part of the docker group, we also don't need to do anything
     if [[ "$(groups | grep --count '\bdocker\b')" -eq 0 ]]; then
-        read -p "Do you want to enable sudo-less docker execution? " yn < /dev/tty
+        read -p "Do you want to enable sudo-less docker execution in the future? " yn < /dev/tty
         case $yn in
             [Yy]* )
                 sudo usermod -aG docker "${USER}"
+                echo "Log out and back in to update your user groups and use docker without sudo"
                 sg docker -c "/usr/bin/env bash $0"
                 exit $?
                 ;;
