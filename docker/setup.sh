@@ -122,8 +122,9 @@ if [[ "$(id -u)" -ne 0 ]]; then
         case $yn in
             [Yy]* )
                 sudo usermod -aG docker "${USER}"
-                newgrp docker
-                ./$0
+                newgrp docker <<EOS
+                /usr/bin/env bash $0
+                EOS
                 exit $?
                 ;;
         esac
@@ -150,7 +151,7 @@ if [[ ! -x "$(command -v docker-compose)" ]]; then
 fi
 
 message "Building containers..."
-${sudo} docker-compose build --pull --quiet
+${sudo} docker-compose build --pull
 
 message "Starting containers..."
 ${sudo} docker-compose up -d
@@ -158,7 +159,6 @@ ${sudo} docker-compose up -d
 # if needed, run composer install
 if [[ ! -d "${INSTALLER_DIR}/vendor" ]]; then
     message "Running first time installer..."
-    # TODO: check if we need to wait for docker to finish setting up the php container
     ${sudo} docker exec trntbl-php composer --working-dir=/app install
 fi
 
