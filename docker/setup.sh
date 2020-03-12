@@ -122,9 +122,7 @@ if [[ "$(id -u)" -ne 0 ]]; then
         case $yn in
             [Yy]* )
                 sudo usermod -aG docker "${USER}"
-                newgrp docker <<EOS
-                /usr/bin/env bash $0
-                EOS
+                sg docker -c "/usr/bin/env bash $0"
                 exit $?
                 ;;
         esac
