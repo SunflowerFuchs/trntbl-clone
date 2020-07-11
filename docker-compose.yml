@@ -1,0 +1,31 @@
+version: "3.7"
+
+x-restart-policy:
+    &restart-policy
+    restart: unless-stopped
+
+services:
+    php:
+        << : *restart-policy
+        build:
+          context: docker/php/${APP_ENV:-prod}
+          args:
+            - USER_ID=${USER_ID:-1000}
+        env_file: .env
+        environment:
+            XDEBUG_CONFIG: "remote_port=${XDEBUG_PORT:-9000}"
+            PHP_IDE_CONFIG: "serverName=php"
+        volumes:
+            - "./:/app"
+            - "./:/tmp/xdebug"
+
+    nginx:
+        <<: *restart-policy
+        image: nginx:latest
+        depends_on:
+            - php
+        volumes:
+            - "./:/app"
+            - "./docker/nginx/conf.d/:/etc/nginx/conf.d/"
+        ports:
+            - "${NGINX_PORT:-80}:80"
