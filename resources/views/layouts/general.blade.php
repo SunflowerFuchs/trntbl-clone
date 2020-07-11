@@ -33,7 +33,7 @@
                     <div class="mastfoot">
                         <div class="inner">
                             <p>Made with &hearts; by Pascal (<a href="https://twitter.com/sunflowerfuchs">@SunflowerFuchs</a> on twitter).</p>
-                            <p><a href="{{ url('/my-site/cookies') }}">Cookie policy</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/known-bugs') }}">Known bugs</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/troubleshooting') }}">Troubleshooting</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/contact') }}">Contact</a></p>
+                            <p><a href="{{ url('/my-site/cookies') }}">Cookie policy</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/known-bugs') }}">Known bugs</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/troubleshooting') }}">Troubleshooting</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/contact') }}">Contact</a>&Tab;&VerticalBar;&Tab;<a href="https://ko-fi.com/sunflowerfuchs">Donate</a></p>
                         </div>
                     </div>
                 @show
