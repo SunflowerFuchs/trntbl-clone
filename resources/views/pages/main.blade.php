@@ -1,6 +1,6 @@
-@extends('layouts.trntbl')
+@extends('layouts.general')
 
-@section('title', 'Choose a blog')
+@section('title', strtoupper(env('APP_NAME')))
 
 @section('content')
     <div class="masthead clearfix">
@@ -11,8 +11,8 @@
     <div class="inner cover">
         <h1 class="cover-heading">{{ strtoupper(env('APP_NAME')) }}</h1>
         <p class="lead">
-            Hello! This page was made because <a href="http://www.trntbl.me">trntbl.me</a> is currently down.
-            As long as this is the case, this page is intended to give you at least the basic functionality of trntbl.
+            This app will generate you a playlist out of all of your tumblr audio posts, be it original or retweeted.<br/>
+            Just enter your username, and off you go.
         </p>
         <form class="lead form-inline" action="" method="POST" id="user-form">
             <div class="form-group">
@@ -22,16 +22,15 @@
             <button type="submit" class="btn btn-default allowConsent" id="btn-listen">Listen</button>
         </form>
         @if(isset($error))
-                <p class="text-danger lead">
-                    {{ $error }}
-                </p>
+            <p class="text-danger lead">
+                {{ $error }}
+            </p>
         @endif
     </div>
     <div class="mastfoot">
         <div class="inner">
-            <p>Original idea by <a href="http://blog.trntbl.me/">trntbl</a>, this page was made by <a href="http://egoisticalgoat.tumblr.com">me</a>.</p>
-            <p>The easiest way to contact me is on <a href="http://egoisticalgoat.tumblr.com">tumblr</a><span style="display: none"> or via <a rel="me" href="https://quey.org/@EgoisticalGoat">Mastodon</a></span>.
-            I also have a list of <a href="{{ url('/my-site/known-bugs') }}">known bugs</a> and a <a href="{{ url('/my-site/cookies') }}">cookie policy</a> <a href=""></a>.</p>
+            <p>Made with &hearts; by Pascal (<a href="https://twitter.com/sunflowerfuchs">@SunflowerFuchs</a> on twitter).</p>
+            <p><a href="{{ url('/my-site/cookies') }}">Cookie policy</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/known-bugs') }}">Known bugs</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/troubleshooting') }}">Troubleshooting</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/contact') }}">Contact</a></p>
         </div>
     </div>
 @endsection

@@ -11,30 +11,35 @@
 |
 */
 
-use App\Http\Controllers\InterfaceController;
-
 Route::any('/', function () {
-    return view('trntbl.main');
+    return view('pages.main');
 });
 
 Route::group(['prefix' => 'my-site'], function () {
     Route::any('known-bugs', function () {
-        return view('trntbl.bugs');
+        return view('pages.bugs');
+    });
+
+    Route::any('troubleshooting', function () {
+        return view('pages.troubleshooting');
     });
 
     Route::any('cookies', function () {
-        return view('trntbl.cookies');
+        return view('pages.cookies');
+    });
+
+
+    Route::any('contact', function () {
+        return view('pages.contact');
     });
 });
 
-Route::any('/{username}/{tag?}', function () {
-    return view('trntbl.list');
+Route::any('/{username}/{tag?}', function (string $username, string $tag = null) {
+    return view('pages.list', [
+        'user' => $username
+    ]);
 });
 
-Route::any('/api/json/{username}/{tag?}', function (String $username, String $tag = null) {
-    $InterfaceController = new InterfaceController();
-    return $InterfaceController->showData($username, $tag, InterfaceController::returnJSON);
-});
-
+Route::any('/api/json/{username}/{tag?}', 'InterfaceController@showData');
 Route::any('/api/json/id/{username}/{id}', 'InterfaceController@showPostByID');
 Route::any('/api/json/offset/{username}/{offset}/{tag?}', 'InterfaceController@showPostByOffset');

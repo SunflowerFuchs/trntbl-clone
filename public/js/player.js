@@ -137,28 +137,37 @@ function createListItem(button, id, trackname, trackartist, trackurl, originalur
 
 function loadNextMedia() {
     var next;
-    if (!player.nextPlaylistTrack(player)) { // check if we have something in our playlist, and if yes, play it
-        if (shuffle[0].checked) {
-            var offset = Math.floor(Math.random() * (total - 1));
-            updateMedia('offset', offset);
-        } else if (typeof lastid === "undefined") {
-            updateMedia('offset', 0);
-        } else {
-            var current = $('#' + lastid);
-            if (current.parent().nextAll('tr').length === 0) {
-                loadPage(currentid++).then(function (data) {
-                    if (data.posts.data.length === 0) {
-                        next = current.parent().parent().children().first().children().first();
-                    } else {
-                        next = current.parent().next().children().first();
-                    }
+    // if there's anything in the queue, skip this function so we don't overwrite it
+    if (player.nextPlaylistTrack(player)) {
+        return;
+    }
 
-                    updateMedia('id', next.attr('id'));
-                });
-            } else {
-                next = current.parent().next().children().first();
+    // if there are no songs, bail out
+    if (total === 0) {
+        artistinfo.text('');
+        return;
+    }
+
+    if (shuffle[0].checked) {
+        var offset = Math.floor(Math.random() * (total - 1));
+        updateMedia('offset', offset);
+    } else if (typeof lastid === "undefined") {
+        updateMedia('offset', 0);
+    } else {
+        var current = $('#' + lastid);
+        if (current.parent().nextAll('tr').length === 0) {
+            loadPage(currentid++).then(function (data) {
+                if (data.posts.data.length === 0) {
+                    next = current.parent().parent().children().first().children().first();
+                } else {
+                    next = current.parent().next().children().first();
+                }
+
                 updateMedia('id', next.attr('id'));
-            }
+            });
+        } else {
+            next = current.parent().next().children().first();
+            updateMedia('id', next.attr('id'));
         }
     }
 }
@@ -203,7 +212,7 @@ function updateMedia(source, id) {
                     player.setSrc(data.posts[0].audio_url);
                     player.load();
                 } else {
-                    if (tries <= maxRetries) {
+                    if (tries <= maxRetries && !stopLoading) {
                         tries += 1;
                         updateMedia(source, id + 1);
                     } else {

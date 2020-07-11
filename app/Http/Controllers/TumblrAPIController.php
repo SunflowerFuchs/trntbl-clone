@@ -75,7 +75,7 @@ class TumblrAPIController extends Controller
                     $this->log->log(Logger::INFO, 'User not found: "' . $this->user . '"');
                 } else {
                     $this->log->log(Logger::ERROR, 'Unknown exception: "' . $e->getMessage() . '"; User: ' . $this->user);
-                    return view('trntbl.main', [
+                    return view('pages.main', [
                         'error' => "Unknown error. \n Try again later, and if it persists, contact me.",
                     ]);
                 }
@@ -106,14 +106,14 @@ class TumblrAPIController extends Controller
             $data = json_decode($response->getBody(), true)['response'];
             $data = $this->filterPosts($data);
             if (!isset($data['total_posts']) || $data['total_posts'] == 0) {
-                return view('trntbl.main', [
+                return view('pages.main', [
                     'error' => 'No audio posts found!',
                 ]);
             }
             return $data;
         } catch (RequestException $e) {
             $this->log->log(Logger::WARNING, 'Tumblr-API not reachable; Error: "' . $e->getMessage() . '"');
-            return view('trntbl.main', [
+            return view('pages.main', [
                 'error' => 'Couldn\'t load audio posts, maybe tumblrs API is down at the moment...',
             ]);
         }
@@ -132,14 +132,14 @@ class TumblrAPIController extends Controller
             ]);
         } catch (RequestException $e) {
             $this->log->log(Logger::WARNING, 'Tumblr-API not reachable; Error: "' . $e->getMessage() . '"');
-            return view('trntbl.main', [
+            return view('pages.main', [
                 'error' => 'Couldn\'t load audio posts, maybe tumblrs API is down at the moment...',
             ]);
         }
 
         $data = json_decode($response->getBody(), true)['response'];
         if (!isset($data['total_posts']) || $data['total_posts'] == 0) {
-            return view('trntbl.main', [
+            return view('pages.main', [
                 'error' => 'No audio posts found!',
             ]);
         }

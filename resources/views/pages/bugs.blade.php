@@ -1,4 +1,4 @@
-@extends('layouts.trntbl')
+@extends('layouts.general')
 
 @section('title', 'Known bugs')
 
@@ -15,7 +15,6 @@
         </ul>
         <h1 class="cover-heading">Known bugs</h1>
         <ul style="display: inline-block; text-align: left">
-            <li>When you haven't accepted cookies on tumblr yet, the audio files will fail to load</li>
             <li>When disabling shuffle, you start from the beginning of the list</li>
             <li>Play button is hard to hit on some devices</li>
         </ul>

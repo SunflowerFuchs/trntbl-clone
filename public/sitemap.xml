@@ -5,23 +5,28 @@
       xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
             http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
     <url>
-      <loc>https://egoisticalgoat.de/</loc>
-      <lastmod>2018-12-25T18:12:07+00:00</lastmod>
+      <loc>https://soundblr.com/</loc>
+      <lastmod>2020-07-11T00:00:00+00:00</lastmod>
       <priority>1.00</priority>
     </url>
     <url>
-      <loc>https://egoisticalgoat.de/egoisticalgoat</loc>
-      <lastmod>2018-12-25T18:12:07+00:00</lastmod>
-      <priority>0.80</priority>
+        <loc>https://soundblr.com/my-site/troubleshooting</loc>
+        <lastmod>2020-07-11T00:00:00+00:00</lastmod>
+        <priority>0.50</priority>
     </url>
     <url>
-      <loc>https://egoisticalgoat.de/my-site/known-bugs</loc>
-      <lastmod>2018-11-05T12:09:07+00:00</lastmod>
-      <priority>0.20</priority>
+      <loc>https://soundblr.com/my-site/known-bugs</loc>
+      <lastmod>2020-07-11T00:00:00+00:00</lastmod>
+      <priority>0.25</priority>
     </url>
     <url>
-      <loc>https://egoisticalgoat.de/my-site/cookies</loc>
-      <lastmod>2018-11-05T12:09:07+00:00</lastmod>
-      <priority>0.20</priority>
+      <loc>https://soundblr.com/my-site/cookies</loc>
+      <lastmod>2020-07-11T00:00:00+00:00</lastmod>
+      <priority>0.25</priority>
+    </url>
+    <url>
+        <loc>https://soundblr.com/my-site/contact</loc>
+        <lastmod>2020-07-11T00:00:00+00:00</lastmod>
+        <priority>0.10</priority>
     </url>
 </urlset>

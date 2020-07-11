@@ -24,7 +24,7 @@ class InterfaceController extends Controller
     /** @var  TumblrAPIController */
     private $API;
 
-    function showData(string $username, string $tag = null, int $returnType = InterfaceController::returnVIEW) {
+    function showData(string $username, string $tag = null, int $returnType = InterfaceController::returnJSON) {
         $this->API = new TumblrAPIController(strtolower($username));
 
         $data = $this->loadTumblrData($tag);
@@ -50,7 +50,9 @@ class InterfaceController extends Controller
             return response($json, 200)->header('Content-Type', 'application/json')->header('encoding', 'utf-8');
         }
 
-        return view('trntbl.list');
+        return view('pages.list', [
+            'user' => $username
+        ]);
     }
 
     function showPostByID(string $username, string $id) {
@@ -78,7 +80,7 @@ class InterfaceController extends Controller
                 return $result;
             }
 
-            return view('trntbl.main', [
+            return view('pages.main', [
                 'error' => 'User not found'
             ]);
         }

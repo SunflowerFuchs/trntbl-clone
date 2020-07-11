@@ -1,7 +1,6 @@
-@extends('layouts.trntbl')
+@extends('layouts.general')
 
-@section('title', (isset($user)?$user:'listening...') . ' - ' . env('APP_NAME'))
-
+@section('title', (isset($user)?$user:'listening...') . ' - ' . strtoupper(env('APP_NAME')))
 
 @section('content')
     <input type="hidden" value="{{ url('/api/json') }}" id="apiurl">
@@ -39,7 +38,7 @@
 @section('stylesheets')
     @parent
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelementplayer.min.css">
-    <link rel="stylesheet" href="{{ asset('css/playlist.css', true) }}?cbr={{ File::lastModified( public_path() . '/css/playlist.css' )  }}">
+    <link rel="stylesheet" href="{{ asset('css/playlist.css') }}?cbr={{ File::lastModified( public_path() . '/css/playlist.css' )  }}">
 
     <style>
         .site-wrapper, .site-wrapper-inner, .cover-container {
