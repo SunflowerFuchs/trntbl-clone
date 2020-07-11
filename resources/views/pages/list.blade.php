@@ -2,31 +2,34 @@
 
 @section('title', (isset($user)?$user:'listening...') . ' - ' . strtoupper(env('APP_NAME')))
 
-@section('content')
-    <input type="hidden" value="{{ url('/api/json') }}" id="apiurl">
-    <div class="masthead clearfix">
-        <div class="inner">
-            <audio id="audioplayer" class="center-block" autoplay="autoplay"></audio>
-            <div class="marquee">
-                <marquee id="artistinfo">Loading...</marquee>
-            </div>
-            <div class="checkbox">
-                <label>
-                    <input type="checkbox" id="shuffle"> Shuffle
-                </label>
-            </div>
+@section('header')
+    <div class="masthead">
+        <div class="marquee">
+            <marquee id="artistinfo">Loading...</marquee>
+        </div>
+        <audio id="audioplayer" class="center-block" autoplay="autoplay"></audio>
+        <div class="checkbox col-med-6">
+            <label>
+                <input type="checkbox" id="shuffle"> Shuffle
+            </label>
         </div>
     </div>
+@endsection
 
-    <div class="inner cover pre-scrollable">
-        <!-- Add table with posts here -->
+@section('content')
+    <div class="pre-scrollable">
+        <input type="hidden" value="{{ url('/api/json') }}" id="apiurl">
+
         <table class="table" id="posts-table">
             <tbody id="posts-table-body"></tbody>
         </table>
+
+        <img id="loading" src="/img/loading-bar.gif" style="display:block; position:absolute; left:0; right:0; top:50%; margin:auto;">
     </div>
-    <img id="loading" src="/img/loading-bar.gif" style="display:block; position:absolute; left:0; right:0; top:50%; margin:auto;">
 @endsection
 
+@section('footer')
+@endsection
 
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelement-and-player.min.js"></script>

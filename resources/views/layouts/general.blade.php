@@ -17,19 +17,26 @@
     <div class="site-wrapper">
         <div class="site-wrapper-inner">
             <div class="cover-container">
+                @section('header')
+                    <div class="masthead">
+                        <div class="inner">
+                            <h3 class="masthead-brand"><a href="{{ url('/') }}">{{ strtoupper(env('APP_NAME')) }}</a></h3>
+                        </div>
+                    </div>
+                @show
 
-                @yield('content')
+                <div class="inner cover">
+                    @yield('content')
+                </div>
 
-            </div>
-        </div>
-
-        <div id="cookieBanner">
-            <div id="cookieBannerClose"><a href="#">x</a></div>
-            By continuing to use this site you consent to the use of cookies on your device as described in our cookie policy unless you have disabled them.
-            <div id="cookieBannerActions">
-                <a class="noconsent" href="{{ url('/my-site/cookies') }}">Learn about this website's cookies</a>
-                &mdash;
-                <a class="denyConsent noconsent" href="#">Disallow cookies</a>
+                @section('footer')
+                    <div class="mastfoot">
+                        <div class="inner">
+                            <p>Made with &hearts; by Pascal (<a href="https://twitter.com/sunflowerfuchs">@SunflowerFuchs</a> on twitter).</p>
+                            <p><a href="{{ url('/my-site/cookies') }}">Cookie policy</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/known-bugs') }}">Known bugs</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/troubleshooting') }}">Troubleshooting</a>&Tab;&VerticalLine;&Tab;<a href="{{ url('/my-site/contact') }}">Contact</a></p>
+                        </div>
+                    </div>
+                @show
             </div>
         </div>
     </div>

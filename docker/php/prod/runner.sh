@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 # init composer
-composer install
+composer install --no-dev
 
 # initialize artisan
 [[ -z ${APP_KEY} ]] && php /app/artisan key:generate

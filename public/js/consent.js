@@ -7,7 +7,6 @@ var Consent = {
             deleteAllCookies();
         }
 
-        var d = new Date();
         var exdays = 30*12; // 1 year
         if (consent === true) { // if consent was explicitly given, just delete the cookie again
             exdays = -1;
@@ -20,14 +19,6 @@ var Consent = {
 
     hasConsent: function() {
         return getCookie(Consent.cookie) !== "false";
-    },
-
-    denyConsent: function() {
-        Consent.setConsentCookie(false);
-    },
-
-    grantConsent: function() {
-        Consent.setConsentCookie(true);
     },
 
     changeCookieConsent: function() {

@@ -212,7 +212,7 @@ function updateMedia(source, id) {
                     player.setSrc(data.posts[0].audio_url);
                     player.load();
                 } else {
-                    if (tries <= maxRetries && !stopLoading) {
+                    if (tries <= maxRetries) {
                         tries += 1;
                         updateMedia(source, id + 1);
                     } else {

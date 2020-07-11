@@ -13,6 +13,7 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// These all have a /api prefix
+Route::any('/json/{username}/{tag?}', 'InterfaceController@showData');
+Route::any('/json/id/{username}/{id}', 'InterfaceController@showPostByID');
+Route::any('/json/offset/{username}/{offset}/{tag?}', 'InterfaceController@showPostByOffset');

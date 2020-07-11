@@ -179,9 +179,9 @@ body {
  * Affix and center
  */
  #loading {
-	 width: 50%;
+     width: 50%;
  }
- 
+
 .albumart {
     width: auto;
     max-width: 10vw;
@@ -211,9 +211,9 @@ body {
   #cookieBanner {
       max-width: 20%;
   }
-  
+
   #loading {
-	  width: 25%;
+      width: 25%;
   }
 
   .albumart {
@@ -226,6 +226,7 @@ body {
   .mastfoot,
   .cover-container {
     width: 700px;
+    max-width: 100%;
   }
 }
 

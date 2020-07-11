@@ -1,6 +1,6 @@
 function setCookie(cname, cvalue, exdays) {
     if (typeof Consent !== "undefined" && typeof Consent.hasConsent !== "undefined" && typeof Consent.cookie !== "undefined") {
-        if (cname != Consent.cookie && Consent.hasConsent() === false) return; // don't set cookies if cookie consent has been revoked
+        if (cname !== Consent.cookie && Consent.hasConsent() === false) return; // don't set cookies if cookie consent has been revoked
     }
 
     var d = new Date();
