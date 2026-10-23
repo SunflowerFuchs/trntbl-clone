@@ -1,6 +1,6 @@
 services:
   php:
-    image: SunflowerFuchs/trntbl:dev
+    image: sunflowerfuchs/trntbl:dev
     build:
       context: .
       dockerfile: docker/Dockerfile
