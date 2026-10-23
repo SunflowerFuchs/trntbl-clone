@@ -4,7 +4,7 @@
 
 
 @section('content')
-    <input type="hidden" value="{{ url('/api/json') }}" id="apiurl">
+    <input type="hidden" value="/api/json" id="apiurl">
     <div class="masthead clearfix">
         <div class="inner">
             <audio id="audioplayer" class="center-block" autoplay="autoplay"></audio>
@@ -32,14 +32,14 @@
 @section('scripts')
     <script src="https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelement-and-player.min.js"></script>
 
-    <script src="{{ asset('js/playlist.js', true) }}?cbr={{ File::lastModified( public_path() . '/js/playlist.js' )  }}"></script>
-    <script src="{{ asset('js/player.js', true) }}?cbr={{ File::lastModified( public_path() . '/js/player.js' )  }}"></script>
+    <script src="/js/playlist.js?cbr={{ File::lastModified( public_path() . '/js/playlist.js' )  }}"></script>
+    <script src="/js/player.js?cbr={{ File::lastModified( public_path() . '/js/player.js' )  }}"></script>
 @endsection
 
 @section('stylesheets')
     @parent
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/mediaelement@4.2.5/build/mediaelementplayer.min.css">
-    <link rel="stylesheet" href="{{ asset('css/playlist.css', true) }}?cbr={{ File::lastModified( public_path() . '/css/playlist.css' )  }}">
+    <link rel="stylesheet" href="/css/playlist.css?cbr={{ File::lastModified( public_path() . '/css/playlist.css' )  }}">
 
     <style>
         .site-wrapper, .site-wrapper-inner, .cover-container {

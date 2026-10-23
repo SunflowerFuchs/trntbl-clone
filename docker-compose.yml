@@ -1,0 +1,21 @@
+services:
+  php:
+    image: SunflowerFuchs/trntbl:dev
+    build:
+      context: .
+      dockerfile: docker/Dockerfile
+    restart: unless-stopped
+    volumes:
+      - .env:/app/.env
+  caddy:
+    image: caddy:alpine
+    restart: unless-stopped
+    ports:
+      - ${PORT:-80}:80
+    volumes: 
+      - caddy-data:/data
+      - ./docker/Caddyfile:/etc/caddy/Caddyfile
+      - .:/app
+
+volumes:
+  caddy-data:

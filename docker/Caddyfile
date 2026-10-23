@@ -1,0 +1,11 @@
+{
+	servers {
+		trusted_proxies static private_ranges 0.0.0.0/32
+	}
+}
+
+:80 {
+	root /app/public
+	php_fastcgi php:9000
+	file_server
+}
